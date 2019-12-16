@@ -23,6 +23,8 @@
         >
           GitHub
         </a>
+        <a href="./ppt">to ppt</a>
+        <a href="./login">to login</a>
         <button @click="onClick">gulpFile</button>
       </div>
     </div>
