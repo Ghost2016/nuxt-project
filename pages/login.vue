@@ -36,7 +36,11 @@ export default {
   layout: 'base',
   data() {
     return {
-      tmp: {},
+      tmp: {
+        username: 'admin',
+        password: '123456',
+        code: '1234'
+      },
       codeSrc: '/api/code',
     }
   },
@@ -46,9 +50,9 @@ export default {
     ])
   },
   mounted() {
-    if (this.token) {
-      this.$router.replace('/admin/posts')
-    }
+    // if (this.token) {
+    //   this.$router.replace('/admin/posts')
+    // }
   },
   methods: {
     handleCode() {
@@ -58,8 +62,8 @@ export default {
       if (!this.tmp.username || !this.tmp.password || !this.tmp.code) return
 
       await this.$store.dispatch('login', this.tmp)
-      if (!this.token) return this.handleCode()
-      this.$router.replace('/admin/posts')
+      // if (!this.token) return this.handleCode()
+      // this.$router.replace('/admin/posts')
     }
   }
 }

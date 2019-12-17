@@ -13,6 +13,7 @@ ajax.interceptors.response.use((response) => {
   const { data } = response
   if (data && !isServer && !data.success) {
     alert(data.message)
+    Promise.reject()
   }
   return data
 }, error => Promise.reject(error))
@@ -25,22 +26,22 @@ export const mutations = {
 }
 
 export const actions = {
-  async nuxtServerInit({ commit, dispatch }, { req, res }) {
+  async nuxtServerInit({ commit, dispatch }, ctx) {
     debugger
-    if (req.cookies && req.cookies.token) {
+    if (ctx.cookies && ctx.cookies.token) {
       commit('setData', {
         key: 'token',
-        value: req.cookies.token,
+        value: ctx.cookies.token,
       })
     }
   },
 
   async login({ commit, dispatch }, body) {
-    const { data } = await ajax.post('/login', body)
-    commit('setData', {
-      key: 'token',
-      value: data.token,
-    })
+    const { data } = await ajax.post('/user/login', body)
+    // commit('setData', {
+    //   key: 'token',
+    //   value: data.token,
+    // })
     return data
   }
 }

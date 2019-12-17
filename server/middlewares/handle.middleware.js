@@ -1,28 +1,29 @@
-module.exports = (ctx, next) => {
-  const { req, res} = ctx
-  res.handleError = (message = '', error = {}, code) => {
+module.exports = async (ctx, next) => {
+  ctx.handleError = (message = '', error = {}, code) => {
     if (code) {
-      return (res.status(code).json({
+      ctx.response.status = code
+      ctx.response.body = {
         success: false,
         message,
-        error,
-      }))
+        error
+      }
     } else {
-      return (res.json({
+      ctx.response.body = {
         success: false,
         message,
-        error,
-      }))
+        error
+      }
     }
   }
 
-  res.handleSuccess = (data, rest = {}) => {
-    return (res.json({
+  ctx.handleSuccess = async (data, rest = {}) => {
+    ctx.response.type = 'application/json';
+    ctx.response.body = {
       success: true,
       data,
-      ...rest,
-    }))
+      ...rest
+    }
   }
 
-  next()
+  await next()
 }

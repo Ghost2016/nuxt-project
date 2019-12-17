@@ -1,28 +1,34 @@
 const Koa = require('koa')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
+/* API server start */
+require('./models')
 const cors = require('koa-cors')
 const bodyParser = require('koa-bodyparser')
-const cookie = require('koa-cookie').default
+// const bodyParser = require('koa-body')
+const cookieParser = require('koa-cookie').default
 const router =  require('./router')
 const globalConfig = require('./config/global.config')
 const handle = require('./middlewares/handle.middleware')
+const validate = require('./middlewares/validate.middleware')
 
 const app = new Koa()
-app.use((ctx, next) => {
-  console.log(ctx.req.url)
-  next()
-})
-app.use(cors())
-  // .use(bodyParser())
-  .use(handle)
-  .use(cookie())
-app.use(router.routes())
 
-app.use((ctx, next) => {
-  console.log('here1')
-  next()
-})
+//记录URL以及页面执行时间
+app.use(async (ctx,next) =>{
+  console.log(`Process ${ctx.request.method} ${ctx.request.url}`);
+  var 
+      start = new Date().getTime(),
+      execTime;
+      await next();
+      execTime = new Date().getTime() -start;
+      ctx.response.set('X-Response-Time',`${execTime}ms`);
+}).use(cors())
+  .use(bodyParser())
+  .use(handle)
+  .use(validate)
+  .use(cookieParser())
+  .use(router.routes())
 
 // Import and Set Nuxt.js options
 const config = require('../nuxt.config.js')
@@ -44,15 +50,16 @@ async function start () {
   } else {
     await nuxt.ready()
   }
-
-  app.use((ctx) => {
-    console.log('here')
-    ctx.status = 200
-    ctx.respond = false // Bypass Koa's built-in response handling
-    ctx.req.ctx = ctx // This might be useful later on, e.g. in nuxtServerInit or with nuxt-stash
-    nuxt.render(ctx.req, ctx.res)
-  })
-
+  app.use((ctx, next) => {
+    if(ctx.request.url.indexOf('api') == -1) {
+      ctx.status = 200
+      ctx.respond = false // Bypass Koa's built-in response handling
+      ctx.response.ctx = ctx // This might be useful later on, e.g. in nuxtServerInit or with nuxt-stash
+      nuxt.render(ctx.req, ctx.res)
+      } else {
+        next()
+      }
+    })
   app.listen(port, host)
   consola.ready({
     message: `Server listening on http://${host}:${port}`,
