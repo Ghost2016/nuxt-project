@@ -23,10 +23,10 @@
         @click="handleCode"
       >
     </div> -->
-    <button
+    <el-button
       class="primary"
       @click="login"
-    >登录</button>
+    >登录</el-button>
   </div>
 </template>
 
