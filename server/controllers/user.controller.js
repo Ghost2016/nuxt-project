@@ -36,12 +36,12 @@ exports.login = async (ctx, next) => {
         maxAge: globalConfig.jwt.expiresIn * 1000, // 与jwt有限期一致，cookie是毫秒
         httpOnly: true,
       })
-      response.clearCookie('code')
-      response.handleSuccess({ token: t })
+      // response.clearCookie('code')
+      ctx.handleSuccess({ token: t })
     } else {
-      response.handleError('用户名或密码错误')
+      ctx.handleError('用户名或密码错误')
     }
   } catch (error) {
-    response.handleError('登录失败', error)
+    ctx.handleError('登录失败', error)
   }
 }
