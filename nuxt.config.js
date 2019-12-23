@@ -29,7 +29,19 @@ module.exports = {
   ** Plugins to load before mounting the App
   */
   plugins: [
-    '@/plugins/element-ui'
+    {
+      src:'@/plugins/element-ui',
+      ssr: true,
+    },
+    {
+      src: '@/plugins/components',
+      ssr: true,
+    },
+
+    {
+      src: '@/plugins/filters',
+      ssr: true,
+    },
   ],
   /*
   ** Nuxt.js dev-modules
@@ -40,7 +52,11 @@ module.exports = {
   ** Nuxt.js modules
   */
   modules: [
+    '@nuxtjs/style-resources',
   ],
+  styleResources: {
+    scss: '~/assets/styles/main.scss'
+  },
   /*
   ** Build configuration
   */
