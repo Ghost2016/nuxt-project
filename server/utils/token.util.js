@@ -16,3 +16,9 @@ exports.sign = (user) => {
   return token
 }
 
+// token => {username: 'q', userId: 'asdf'}
+exports.verify = (token) => {
+  const decoded = jwt.verify(token, md5(secret))
+  return decoded
+}
+
