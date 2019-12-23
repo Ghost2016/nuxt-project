@@ -11,7 +11,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.base {
-  padding: 15px;
-}
+  .base {
+    padding: 15px;
+    box-sizing: border-box;
+  }
 </style>

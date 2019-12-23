@@ -6,7 +6,7 @@ exports.getCategories = async (ctx, next) => {
   const { role } = ctx.state.user
   let option = (role === 'superAdmin') ? {} : {isShow: true}
   try {
-    let categories = await Category.find(option, {_id: 1, title: 1})
+    let categories = await Category.find(option, {_id: 1, title: 1, isShow: 1})
       .sort({
         sort: -1,
       })
@@ -80,7 +80,7 @@ exports.patchCategory = async (ctx, next) => {
 
   try {
     const { body } = ctx.request
-    const { id } = ctx.request.query
+    const { id } = body
     const data = await Category.findByIdAndUpdate(id, body).exec()
     ctx.handleSuccess(data)
   } catch (error) {

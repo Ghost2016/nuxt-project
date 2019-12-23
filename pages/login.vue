@@ -63,7 +63,7 @@ export default {
 
       await this.$store.dispatch('login', this.tmp)
       // if (!this.token) return this.handleCode()
-      // this.$router.replace('/admin/posts')
+      this.$router.replace('/')
     }
   }
 }
