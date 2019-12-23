@@ -18,7 +18,7 @@ exports.login = async (ctx, next) => {
     },
   })
   if (msg) {
-    return response.handleError(msg)
+    return ctx.handleError(msg)
   }
 
   try {
