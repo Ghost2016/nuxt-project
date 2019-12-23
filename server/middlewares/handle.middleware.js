@@ -25,5 +25,12 @@ module.exports = async (ctx, next) => {
     }
   }
 
+  ctx.clearCookie = async (name) => {
+    ctx.cookies.set(name, '', {
+      maxAge: 0,
+      signed: false
+    })
+  }
+
   await next()
 }

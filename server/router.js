@@ -18,22 +18,20 @@ router.get('/api/gulp', async (ctx, next) => {
 router
   .post('/api/user/login',
   user.login)
+  .get('/api/user/logout',
+  user.logout)
 
 router
+  .use(check.auth('token'))
   .get('/api/category/all',
-  check.auth('token'),
   category.getCategories)
   .get('/api/category',
-  check.auth('token'),
   category.getCategory)
   .post('/api/category',
-  check.auth('token'),
   category.newCategory)
   .delete('/api/category',
-  check.auth('token'),
   category.deleteCategory)
   .patch('/api/category',
-  check.auth('token'),
   category.patchCategory)
 
 module.exports = router
