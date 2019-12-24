@@ -81,8 +81,8 @@ exports.patchCategory = async (ctx, next) => {
   try {
     const { body } = ctx.request
     const { id } = body
-    const data = await Category.findByIdAndUpdate(id, body).exec()
-    ctx.handleSuccess(data)
+    await Category.findByIdAndUpdate(id, body).exec()
+    ctx.handleSuccess({id})
   } catch (error) {
     ctx.handleError('分类更新失败', error)
   }
