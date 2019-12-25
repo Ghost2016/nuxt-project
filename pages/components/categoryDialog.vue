@@ -101,7 +101,7 @@ export default {
           value: category.description || ''
         },
         {
-          label: '是否私有',
+          label: '是否公开',
           property: 'isShow',
           type: 'radio',
           value: category.isShow || false,
