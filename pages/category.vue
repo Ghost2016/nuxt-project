@@ -1,51 +1,8 @@
 <template>
   <div class="admin-category">
-    <div
-      v-if="isAdd || tmp.id"
-      class="item">
-      <input
-        v-model="tmp.title"
-        type="text"
-        placeholder="名称"
-        autofocus>
-      <input
-        v-model="tmp.keywords"
-        type="text"
-        placeholder="关键字">
-      <textarea
-        v-model="tmp.description"
-        rows="5"
-        placeholder="描述"
-      />
-      <input
-        v-model="tmp.sort"
-        type="number"
-        placeholder="排序">
-      <div class="state">
-        <input
-          id="publish"
-          v-model="tmp.isShow"
-          :value="true"
-          name="state"
-          type="radio">
-        <label for="publish">公开</label>
-        <input
-          id="pravite"
-          v-model="tmp.isShow"
-          :value="false"
-          name="state"
-          type="radio">
-        <label for="pravite">私有</label>
-      </div>
-      <button @click="handleAdd(false)">取消</button>
-      <button
-        class="primary"
-        @click="handlePost">确定</button>
-    </div>
-
     <button
       class="primary"
-      @click="handleAdd(true)">添加分类</button>
+      @click="handleAdd()">添加分类</button>
     <div
       v-for="item in categoryFilter"
       :key="item.id"
@@ -61,21 +18,24 @@
           @click="handlePatch(item)">编辑</button>
       </div>
     </div>
+    <category-dialog ref="categoryDialog" @change="getCategories()"></category-dialog>
   </div>
 </template>
 
 <script>
 import { mapState, mapActions } from 'vuex'
 import cloneDeep from 'lodash/cloneDeep'
-
+import categoryDialog from './components/categoryDialog'
 export default {
   layout: 'admin',
   middleware: 'permission',
+  components: {
+    categoryDialog
+  },
   data() {
     return {
       tmp: {},
-      categoryId: '',
-      isAdd: false,
+      categoryId: ''
     }
   },
   computed: {
@@ -85,16 +45,12 @@ export default {
     },
   },
   mounted() {
-    this.setDefault()
     this.getCategories()
   },
   methods: {
     ...mapActions([
       'getCategories',
-      'newCategory',
-      'patchCategory',
       'deleteCategory',
-      'getCategory'
     ]),
     async handleDelete(item) {
       const val = confirm(`确定删除 ${item.title} 分类吗`)
@@ -103,40 +59,12 @@ export default {
         this.getCategories()
       }
     },
-    handleAdd(isAdd) {
-      this.setDefault()
-      this.isAdd = isAdd
+    handleAdd() {
+      this.$refs['categoryDialog'].show()
     },
     async handlePatch(item) {
-      const { data } = await this.getCategory(item.id)
-      this.tmp = {
-        ...item,
-        ...data
-      }
-    },
-    async handlePost() {
-      if (this.tmp.id) {
-        await this.patchCategory(this.tmp)
-        this.getCategories()
-        this.setDefault()
-        this.isAdd = false
-      } else {
-        await this.newCategory(this.tmp)
-        this.getCategories()
-        this.setDefault()
-        this.isAdd = false
-      }
-    },
-    setDefault() {
-      this.tmp = {
-        id: '',
-        title: '',
-        keywords: '',
-        description: '',
-        isShow: true,
-        sort: 0,
-      }
-    },
+      this.$refs['categoryDialog'].show(item.id)
+    }
   },
 }
 </script>

@@ -12,8 +12,12 @@ const ajax = axios.create({
 
 ajax.interceptors.response.use((response) => {
   const { data } = response
-  if (data && !isServer && !data.success) {
+  // success
+  if(data && !isServer && data.success) {
+    return data
+  } else {
     alert(data.message)
+    throw new Error(data.message)
   }
   return data
 }, error => Promise.reject(error))

@@ -61,7 +61,8 @@ export const actions = {
 
   // 获取单个分类
   async getCategory({ state, commit }, id) {
-    return await ajax.get(`/category?id=${id}`)
+    const { data } = await ajax.get(`/category?id=${id}`)
+    return data
   },
   // 新增一个分类
   async newCategory({ state, commit }, data) {
