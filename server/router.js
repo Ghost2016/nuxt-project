@@ -5,9 +5,10 @@ const user = require('./controllers/user.controller')
 const check = require('./middlewares/check.middleware')
 
 const category = require('./controllers/category.controller')
+const article = require('./controllers/article.controller')
 
 const mongoose = require('mongoose')
-const User = mongoose.model('User')
+
 const token = require('./utils/token.util')
 const globalConfig = require('./config/global.config')
 
@@ -34,4 +35,17 @@ router
   .patch('/api/category',
   category.patchCategory)
 
+router
+  // .use(check.auth('token'))
+  .get('/api/articles',
+  article.getArticles)
+  .get('/api/article',
+  article.getArticle)
+  .post('/api/article',
+  article.newArticle)
+  .delete('/api/article',
+  article.deleteArticle)
+  .patch('/api/article',
+  article.patchArticle)
+  
 module.exports = router
