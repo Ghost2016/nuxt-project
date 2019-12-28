@@ -6,7 +6,7 @@ module.exports = {
     secret: 'nuxt'
   },
   app: {
-    domain: isPro ? '/' : 'http://127.0.0.1:3025',
+    domain: isPro ? '/' : 'http://127.0.0.1:3000',
   },
   mongodb: {
     host: '127.0.0.1',
