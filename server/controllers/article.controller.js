@@ -76,6 +76,10 @@ exports.getArticles = async (ctx, next) => {
   return getArticleList(ctx, findOption)
 }
 
+exports.getArticleTop = async (ctx, next) => {
+  return getArticleList(ctx, {status: 3} )
+}
+
 exports.newArticle = async (ctx, next) => {
   const msg = checkBeforeCreated(ctx)
   if(msg) {

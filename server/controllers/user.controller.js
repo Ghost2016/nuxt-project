@@ -47,7 +47,17 @@ exports.login = async (ctx, next) => {
 }
 
 exports.logout = (ctx, next) => {
-  console.log('logout')
   ctx.clearCookie('token')
   ctx.handleSuccess()
+}
+
+exports.getAdmin = async (ctx, next) => {
+  try {
+    const user = await User.findOne({
+      role: 'superAdmin',
+    }).exec()
+    ctx.handleSuccess(user)
+  } catch (error) {
+    ctx.handleError('信息获取失败', error)
+  }
 }
